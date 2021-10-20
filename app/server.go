@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
 
@@ -15,8 +16,14 @@ type Server struct {
 	Router *mux.Router
 }
 
-func (server *Server) Initialize() {
-	fmt.Println("Welcome to Our Toko")
+type AppConfig struct {
+	AppName string
+	AppEnv  string
+	AppPort string
+}
+
+func (server *Server) Initialize(appConfig AppConfig) {
+	fmt.Println("Welcome to " + appConfig.AppName)
 
 	server.Router = mux.NewRouter()
 	server.InitializeRoutes()
@@ -29,7 +36,17 @@ func (server *Server) Run(addr string) {
 
 func Run() {
 	var server = Server{}
+	var appConfig = AppConfig{}
 
-	server.Initialize()
-	server.Run(":9000")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error on Loading .env.example file")
+	}
+
+	appConfig.AppName = "TokoGolang"
+	appConfig.AppEnv = "development"
+	appConfig.AppPort = "9999"
+
+	server.Initialize(appConfig)
+	server.Run(":" + appConfig.AppPort)
 }
