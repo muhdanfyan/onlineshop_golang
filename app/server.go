@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -34,6 +35,14 @@ func (server *Server) Run(addr string) {
 	log.Fatal(http.ListenAndServe(addr, server.Router))
 }
 
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return fallback
+}
+
 func Run() {
 	var server = Server{}
 	var appConfig = AppConfig{}
@@ -43,9 +52,9 @@ func Run() {
 		log.Fatal("Error on Loading .env.example file")
 	}
 
-	appConfig.AppName = "TokoGolang"
-	appConfig.AppEnv = "development"
-	appConfig.AppPort = "9999"
+	appConfig.AppName = getEnv("APP_NAME", "TokoRajab")
+	appConfig.AppEnv = getEnv("APP_ENV", "development")
+	appConfig.AppPort = getEnv("APP_PORT", "9000")
 
 	server.Initialize(appConfig)
 	server.Run(":" + appConfig.AppPort)
