@@ -74,9 +74,9 @@ func Run() {
 	appConfig.AppPort = getEnv("APP_PORT", "9000")
 
 	dbConfig.DBHost = getEnv("DB_HOST", "localhost")
-	dbConfig.DBUser = getEnv("DB_USER", "root")
-	dbConfig.DBPassword = getEnv("DB_PASSWORD", "password")
-	dbConfig.DBName = getEnv("DB_NAME", "dbname")
+	dbConfig.DBUser = getEnv("DB_USER", "postgres")
+	dbConfig.DBPassword = getEnv("DB_PASSWORD", "123")
+	dbConfig.DBName = getEnv("DB_NAME", "onlineshop_go")
 	dbConfig.DBPort = getEnv("DB_PORT", "5432")
 
 	server.Initialize(appConfig, dbConfig)
